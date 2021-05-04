@@ -15,6 +15,8 @@ package vn.degitalsaler.inventory.domain;
 abstract class Command<T> {
 
     T commandId;
+    
+    long createdTime;
 
     public Command(T commandId) {
         super();
@@ -23,5 +25,9 @@ abstract class Command<T> {
 
     public T getCommandId() {
         return this.commandId;
+    }
+
+    public long getCreatedTime() {
+        return this.createdTime;
     }
 }

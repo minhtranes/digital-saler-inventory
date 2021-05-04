@@ -15,6 +15,8 @@ package vn.degitalsaler.inventory.domain;
 abstract class Event<T> {
     
     T eventId;
+    
+    long createdTime;
 
     public Event(T eventId) {
         super();
@@ -23,6 +25,10 @@ abstract class Event<T> {
 
     public T getEventId() {
         return this.eventId;
+    }
+
+    public long getCreatedTime() {
+        return this.createdTime;
     }
     
 }
