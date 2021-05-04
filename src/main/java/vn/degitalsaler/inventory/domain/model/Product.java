@@ -14,6 +14,8 @@ package vn.degitalsaler.inventory.domain.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import vn.degitalsaler.inventory.infrastructure.properties.JsonProductProperties;
+
 public class Product {
     
     private Long id;
@@ -40,17 +42,17 @@ public class Product {
     
     private JsonNode jsonNode;
     
-    public Product(JsonNode jsonNode) {
+    private JsonProductProperties jsonProduct;
+    
+    public Product(Long id, JsonNode jsonNode, JsonProductProperties jsonProduct) {
         super();
         this.jsonNode = jsonNode;
+        this.id = id;
+        this.jsonProduct = jsonProduct;
     }
 
     public Long getId() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getProductId() {
@@ -131,13 +133,5 @@ public class Product {
 
     public void setSupplierInfo(String supplierInfo) {
         this.supplierInfo = supplierInfo;
-    }
-
-    public JsonNode getJsonNode() {
-        return this.jsonNode;
-    }
-
-    public void setJsonNode(JsonNode jsonNode) {
-        this.jsonNode = jsonNode;
     }
 } 
