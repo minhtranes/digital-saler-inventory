@@ -1,1 +1,12 @@
-
+server:
+  port: 8080
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          bindings:
+            input: #just a sample for testing
+              binder: kafka
+              destination: product-event
+              content-type: application/json
