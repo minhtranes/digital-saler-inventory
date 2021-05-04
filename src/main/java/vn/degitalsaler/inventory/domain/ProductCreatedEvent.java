@@ -1,7 +1,7 @@
 /*
- * Class: Product
+ * Class: ProductCreatedEvent
  *
- * Created on May 3, 2021
+ * Created on May 4, 2021
  *
  * (c) Copyright Swiss Post Solution, unpublished work
  * All use, disclosure, and/or reproduction of this material is prohibited
@@ -12,13 +12,9 @@
  */
 package vn.degitalsaler.inventory.domain;
 
-import vn.degitalsaler.inventory.domain.model.Product;
+public class ProductCreatedEvent extends Event<Integer>{
 
-public interface ProductEvent {
-
-    void create(Product product);
-    
-    boolean update(Product product);
-    
-    boolean delete(Long productId);
+    public ProductCreatedEvent(Integer eventId) {
+        super(eventId);
+    }
 }

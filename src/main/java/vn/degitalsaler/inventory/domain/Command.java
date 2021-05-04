@@ -12,8 +12,16 @@
  */
 package vn.degitalsaler.inventory.domain;
 
-public interface ProductCommand<T> {
+abstract class Command<T> {
 
-    
-    
+    T commandId;
+
+    public Command(T commandId) {
+        super();
+        this.commandId = commandId;
+    }
+
+    public T getCommandId() {
+        return this.commandId;
+    }
 }
