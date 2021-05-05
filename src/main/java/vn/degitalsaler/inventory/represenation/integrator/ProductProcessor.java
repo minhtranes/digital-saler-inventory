@@ -12,6 +12,16 @@
  */
 package vn.degitalsaler.inventory.represenation.integrator;
 
+import java.util.function.Function;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import vn.degitalsaler.inventory.domain.Event;
+
 public class ProductProcessor {
 
+    public Function<Event<Long>, JsonNode> process() {
+        return null;
+    }
+    
 }

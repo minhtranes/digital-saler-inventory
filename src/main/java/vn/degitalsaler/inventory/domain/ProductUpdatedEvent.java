@@ -16,28 +16,33 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class ProductUpdatedEvent extends Event<Long>{
 
-    private JsonNode updatedValue;
+    private JsonNode payload;
     
     private String jsonPath;
     
-    public ProductUpdatedEvent(Long eventId) {
+    public ProductUpdatedEvent(Long eventId, String jsonPath, JsonNode updatedValue) {
         super(eventId);
         this.createdTime = System.currentTimeMillis();
+        this.jsonPath = jsonPath;
+        this.payload = updatedValue;
+    }
+  
+    /**
+     * Gets the payload. Include the updated key and value
+     *
+     * @return the payload
+     */
+    public JsonNode getPayload() {
+        return this.payload;
     }
 
-    public JsonNode getUpdatedValue() {
-        return this.updatedValue;
-    }
-
-    public void setUpdatedValue(JsonNode value) {
-        this.updatedValue = value;
-    }
-
+    
+    /**
+     * Gets the json path. Used to detect the update key in json model
+     *
+     * @return the json path
+     */
     public String getJsonPath() {
         return this.jsonPath;
-    }
-
-    public void setJsonPath(String jsonPath) {
-        this.jsonPath = jsonPath;
     }
 }

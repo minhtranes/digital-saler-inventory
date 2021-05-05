@@ -12,7 +12,7 @@
  */
 package vn.degitalsaler.inventory.domain;
 
-abstract class Event<T> {
+public abstract class Event<T> {
     
     T eventId;
     

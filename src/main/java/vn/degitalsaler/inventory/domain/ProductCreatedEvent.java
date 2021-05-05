@@ -12,9 +12,22 @@
  */
 package vn.degitalsaler.inventory.domain;
 
-public class ProductCreatedEvent extends Event<Integer>{
+import com.fasterxml.jackson.databind.JsonNode;
 
-    public ProductCreatedEvent(Integer eventId) {
+public class ProductCreatedEvent extends Event<Long> {
+
+    private JsonNode payload;
+    
+    public ProductCreatedEvent(Long eventId) {
         super(eventId);
+        this.createdTime = System.currentTimeMillis();
+    }
+
+    public JsonNode getPayload() {
+        return this.payload;
+    }
+
+    public void setPayload(JsonNode product) {
+        this.payload = product;
     }
 }
