@@ -13,5 +13,7 @@
 package vn.degitalsaler.inventory.represenation.integrator;
 
 public class ProductHttpGateway {
+    
+    
 
 }

@@ -1,7 +1,7 @@
 /*
- * Class: ProductController
+ * Class: Channels
  *
- * Created on May 5, 2021
+ * Created on May 6, 2021
  *
  * (c) Copyright Swiss Post Solution, unpublished work
  * All use, disclosure, and/or reproduction of this material is prohibited
@@ -10,8 +10,12 @@
  * Swiss Post Solution.
  * Floor 4-5-8, ICT Tower, Quang Trung Software City
  */
-package vn.degitalsaler.inventory.represenation.controller;
+package vn.degitalsaler.inventory.infrastructure;
 
-public class ProductController {
+public class Channels {
+    
+    public static final String HTTP_INPUT_CHANNEL = "httpInputChannel";
+    
+    public static final String HTTP_OUTPUT_CHANNEL = "httpOutputChannel";
 
 }
