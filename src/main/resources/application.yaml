@@ -5,11 +5,9 @@ spring:
     stream:
       kafka:
         binder:
-          bindings:
-            input: #just a sample for testing
-              binder: kafka
-              destination: product-event
-              content-type: application/json
-            product-storage-out:
-              destination: product-storage
-              content-type: application/json
+          brokers:
+            - localhost:9092
+      bindings:
+          product-storage-out:
+            destination: product-storage
+            content-type: application/json

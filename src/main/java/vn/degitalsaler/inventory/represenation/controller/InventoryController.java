@@ -12,6 +12,7 @@
  */
 package vn.degitalsaler.inventory.represenation.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +21,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import vn.degitalsaler.inventory.application.service.ProductService;
+import vn.degitalsaler.inventory.domain.model.Product;
+
 @RestController
 public class InventoryController {
-    
-    
 
+    @Autowired
+    private ProductService productService;
+    
     @PostMapping("/inventory")
     public ResponseEntity<Object> add(@RequestBody final Object product) {
-        return null;
+        
+        this.productService.addProduct(new Product());
+        
+        return ResponseEntity.ok("200");
     }
 
     @GetMapping("/inventory")
@@ -40,7 +48,7 @@ public class InventoryController {
         return null;
     }
 
-    @GetMapping("/inventory")
+    @GetMapping("/inventory?id={id}")
     public ResponseEntity<Object> listById(@RequestParam("id") Integer id) {
         return null;
     }
