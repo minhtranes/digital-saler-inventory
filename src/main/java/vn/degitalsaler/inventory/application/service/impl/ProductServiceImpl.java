@@ -12,6 +12,28 @@
  */
 package vn.degitalsaler.inventory.application.service.impl;
 
-public class ProductServiceImpl {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import vn.degitalsaler.inventory.application.service.ProductService;
+import vn.degitalsaler.inventory.domain.model.Product;
+
+@Service
+public class ProductServiceImpl implements ProductService{
+    
+    @Autowired
+    private StreamBridge streamBridge;
+    
+    @Autowired
+    private ObjectMapper mapper;
+
+    @Override
+    public Product addProduct(Product product) {
+        this.streamBridge.send("product-storage-out", product);
+        return product;
+    }
 
 }

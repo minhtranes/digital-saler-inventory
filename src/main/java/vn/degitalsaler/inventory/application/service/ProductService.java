@@ -12,6 +12,10 @@
  */
 package vn.degitalsaler.inventory.application.service;
 
-public class ProductService {
+import vn.degitalsaler.inventory.domain.model.Product;
 
+public interface ProductService {
+
+    Product addProduct(Product product);
+    
 }

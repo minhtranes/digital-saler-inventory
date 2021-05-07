@@ -10,3 +10,6 @@ spring:
               binder: kafka
               destination: product-event
               content-type: application/json
+            product-storage-out:
+              destination: product-storage
+              content-type: application/json

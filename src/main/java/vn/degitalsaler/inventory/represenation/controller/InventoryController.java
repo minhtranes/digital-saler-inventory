@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class InventoryController {
+    
+    
 
     @PostMapping("/inventory")
-    public ResponseEntity<Object> create(@RequestBody final Object product) {
+    public ResponseEntity<Object> add(@RequestBody final Object product) {
         return null;
     }
 
