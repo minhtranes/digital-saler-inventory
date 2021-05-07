@@ -28,6 +28,38 @@ public class JsonProduct {
         this.jsonProduct = jsonProduct;
     }
 
+    public Long getId() {
+        return null;
+    }
+
+    public String getProductId() {
+        return null;
+    }
+
+    public String getImportDateTime() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
+
+    public Double getPrice() {
+        return null;
+    }
+
+    public int getQuantity() {
+        return 0;
+    }
+
+    public String getUnit() {
+        return null;
+    }
+
+    public double getDiscount() {
+        return 0.0;
+    }
+
     public String getImage() {
         return null;
     }

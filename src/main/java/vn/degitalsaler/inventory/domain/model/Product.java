@@ -30,6 +30,88 @@ public class Product {
 
     private double discount;
     
+    private Image image;
     
+    private SupplierInfo supplierInfo;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getProductId() {
+        return this.productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getImportDateTime() {
+        return this.importDateTime;
+    }
+
+    public void setImportDateTime(String importDateTime) {
+        this.importDateTime = importDateTime;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return this.quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getUnit() {
+        return this.unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public double getDiscount() {
+        return this.discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public Image getImage() {
+        return this.image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public SupplierInfo getSupplierInfo() {
+        return this.supplierInfo;
+    }
+
+    public void setSupplierInfo(SupplierInfo supplierInfo) {
+        this.supplierInfo = supplierInfo;
+    }
 
 }
