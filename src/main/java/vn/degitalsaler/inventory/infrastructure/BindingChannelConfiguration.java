@@ -12,21 +12,11 @@
  */
 package vn.degitalsaler.inventory.infrastructure;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.channel.DirectChannel;
-import org.springframework.messaging.MessageChannel;
 
 @Configuration
 public class BindingChannelConfiguration {
-
-    @Bean(Channels.HTTP_INPUT_CHANNEL)
-    MessageChannel getHttpInputChannel() {
-        return new DirectChannel();
-    }
     
-    @Bean(Channels.HTTP_OUTPUT_CHANNEL)
-    MessageChannel httpOutputChannel() {
-        return new DirectChannel();
-    }
+    
+    
 }
