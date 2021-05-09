@@ -27,7 +27,7 @@ public class ProductRepositoryImpl implements ProductRepository{
     private StreamBridge streamBridge;
     
     @Override
-    public void saveProduct(JsonNode product) {
+    public JsonNode saveProduct(JsonNode product) {
         
         this.streamBridge.send("product-storage-out", product);
     }

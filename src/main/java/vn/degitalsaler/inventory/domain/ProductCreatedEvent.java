@@ -18,8 +18,9 @@ public class ProductCreatedEvent extends Event<Long> {
 
     private JsonNode payload;
     
-    public ProductCreatedEvent(Long eventId) {
+    public ProductCreatedEvent(Long eventId, JsonNode payload) {
         super(eventId);
+        this.payload = payload;
         this.createdTime = System.currentTimeMillis();
     }
 

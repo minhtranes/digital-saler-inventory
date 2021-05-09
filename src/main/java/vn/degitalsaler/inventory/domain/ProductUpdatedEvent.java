@@ -12,18 +12,17 @@
  */
 package vn.degitalsaler.inventory.domain;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ProductUpdatedEvent extends Event<Long>{
 
-    private JsonNode payload;
+    private List<JsonNode> payload;
     
-    private String jsonPath;
-    
-    public ProductUpdatedEvent(Long eventId, String jsonPath, JsonNode updatedValue) {
+    public ProductUpdatedEvent(Long eventId, List<JsonNode> updatedValue) {
         super(eventId);
         this.createdTime = System.currentTimeMillis();
-        this.jsonPath = jsonPath;
         this.payload = updatedValue;
     }
   
@@ -32,17 +31,7 @@ public class ProductUpdatedEvent extends Event<Long>{
      *
      * @return the payload
      */
-    public JsonNode getPayload() {
+    public List<JsonNode> getPayload() {
         return this.payload;
-    }
-
-    
-    /**
-     * Gets the json path. Used to detect the update key in json model
-     *
-     * @return the json path
-     */
-    public String getJsonPath() {
-        return this.jsonPath;
     }
 }

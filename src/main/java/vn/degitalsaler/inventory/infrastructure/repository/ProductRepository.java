@@ -16,6 +16,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public interface ProductRepository {
     
-    void saveProduct(JsonNode product);
+    JsonNode saveProduct(JsonNode product);
 
 }
