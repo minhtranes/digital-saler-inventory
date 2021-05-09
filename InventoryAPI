@@ -102,7 +102,7 @@ paths:
           description: ID of the product
           required: true
           schema:
-            type: long
+            type: integer
             format: int64
       tags:
         - product
