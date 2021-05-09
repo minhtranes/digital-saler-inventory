@@ -21,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import vn.degitalsaler.inventory.application.service.ProductService;
 import vn.degitalsaler.inventory.domain.model.Product;
 
@@ -30,12 +34,25 @@ public class InventoryController {
     @Autowired
     private ProductService productService;
     
+    @Autowired
+    private ObjectMapper mapper;
+    
     @PostMapping("/inventory")
     public ResponseEntity<Object> add(@RequestBody final Object product) {
+        final ObjectNode productAsJson = this.mapper.convertValue(product, ObjectNode.class);
         
-        this.productService.addProduct(new Product());
-        
+        this.productService.addProduct(productAsJson);
+
         return ResponseEntity.ok("200");
+
+//        try {
+//            
+//
+//        }
+//        catch (Exception e) {
+//            // TODO: handle exception
+//            
+//        }
     }
 
     @GetMapping("/inventory")

@@ -1,7 +1,7 @@
 /*
- * Class: ProductService
+ * Class: ProductRepository
  *
- * Created on May 5, 2021
+ * Created on May 7, 2021
  *
  * (c) Copyright Swiss Post Solution, unpublished work
  * All use, disclosure, and/or reproduction of this material is prohibited
@@ -10,20 +10,12 @@
  * Swiss Post Solution.
  * Floor 4-5-8, ICT Tower, Quang Trung Software City
  */
-package vn.degitalsaler.inventory.application.service;
-
-import java.util.List;
+package vn.degitalsaler.inventory.infrastructure.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public interface ProductService {
+public interface ProductRepository {
+    
+    void saveProduct(JsonNode product);
 
-    JsonNode addProduct(JsonNode product);
-    
-    JsonNode updateProduct(JsonNode product);
-    
-    List<JsonNode> findAll();
-    
-    JsonNode findProductById(Long id);
-    
 }

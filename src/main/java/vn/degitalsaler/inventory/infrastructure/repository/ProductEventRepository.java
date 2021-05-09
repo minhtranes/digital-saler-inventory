@@ -1,7 +1,7 @@
 /*
- * Class: ChannelConfiguration
+ * Class: ProductEventRepository
  *
- * Created on May 5, 2021
+ * Created on May 9, 2021
  *
  * (c) Copyright Swiss Post Solution, unpublished work
  * All use, disclosure, and/or reproduction of this material is prohibited
@@ -10,11 +10,12 @@
  * Swiss Post Solution.
  * Floor 4-5-8, ICT Tower, Quang Trung Software City
  */
-package vn.degitalsaler.inventory.infrastructure;
+package vn.degitalsaler.inventory.infrastructure.repository;
 
-import org.springframework.context.annotation.Configuration;
+import vn.degitalsaler.inventory.domain.Event;
 
-@Configuration
-public class BindingChannelConfiguration {
+public interface ProductEventRepository {
+    
+    void saveProductEvent(Event<Long> event);
     
 }

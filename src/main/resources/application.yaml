@@ -11,3 +11,6 @@ spring:
           product-storage-out:
             destination: product-storage
             content-type: application/json
+          product-event-storage-out:
+            destination: product-event-storage
+            content-type: application/json

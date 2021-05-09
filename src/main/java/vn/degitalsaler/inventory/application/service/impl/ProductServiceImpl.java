@@ -12,28 +12,52 @@
  */
 package vn.degitalsaler.inventory.application.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import vn.degitalsaler.inventory.application.service.ProductService;
-import vn.degitalsaler.inventory.domain.model.Product;
+import vn.degitalsaler.inventory.infrastructure.repository.ProductEventRepository;
+import vn.degitalsaler.inventory.infrastructure.repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService{
     
     @Autowired
-    private StreamBridge streamBridge;
-    
+    private ProductRepository productRepository;
+
     @Autowired
-    private ObjectMapper mapper;
+    private ProductEventRepository productEventRepository;
+    
+    @Override
+    public JsonNode addProduct(JsonNode product) {
+        try {
+            this.productRepository.saveProduct(product);
+        }
+        catch (Exception e) {
+        }
+        return product;
+    }
 
     @Override
-    public Product addProduct(Product product) {
-        this.streamBridge.send("product-storage-out", product);
-        return product;
+    public List<JsonNode> findAll() {
+     // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public JsonNode findProductById(Long id) {
+     // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public JsonNode updateProduct(JsonNode product) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
