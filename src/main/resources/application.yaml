@@ -7,10 +7,18 @@ spring:
         binder:
           brokers:
             - localhost:9092
+          configuration:
+            key.serializer: "org.apache.kafka.common.serialization.LongSerializer"
       bindings:
           product-storage-out:
             destination: product-storage
             content-type: application/json
+            producer:
+              partition-key-expression: payload.id
           product-event-storage-out:
             destination: product-event-storage
             content-type: application/json
+          process-in-0:
+            destination: product-storage
+            content-type: application/json
+            group: evaluation

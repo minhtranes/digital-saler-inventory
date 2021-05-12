@@ -12,7 +12,12 @@
  */
 package vn.degitalsaler.inventory.represenation.controller;
 
+import org.apache.kafka.streams.KeyValue;
+import org.apache.kafka.streams.state.KeyValueIterator;
+import org.apache.kafka.streams.state.QueryableStoreTypes;
+import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQueryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +26,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import vn.degitalsaler.inventory.application.service.ProductService;
-import vn.degitalsaler.inventory.domain.model.Product;
 
 @RestController
 public class InventoryController {
@@ -36,6 +39,9 @@ public class InventoryController {
     
     @Autowired
     private ObjectMapper mapper;
+    
+    @Autowired
+    private InteractiveQueryService interactiveQueryService;
     
     @PostMapping("/inventory")
     public ResponseEntity<Object> add(@RequestBody final Object product) {
@@ -65,8 +71,20 @@ public class InventoryController {
         return null;
     }
 
-    @GetMapping("/inventory?id={id}")
-    public ResponseEntity<Object> listById(@RequestParam("id") Integer id) {
+    @GetMapping("/inventorys")
+    public ResponseEntity<Object> listById(@RequestParam("id") Long id) {
+        ReadOnlyKeyValueStore<Long, Object> keyValueStore = this.interactiveQueryService
+            .getQueryableStore("CountsKeyValueStore",
+                QueryableStoreTypes.keyValueStore());
+        
+        System.out.println("count for hello:" + keyValueStore.get(id));
+
+        KeyValueIterator<Long, Object> range = keyValueStore.all();
+        while (range.hasNext()) {
+          KeyValue<Long, Object> next = range.next();
+          System.out.println("count for " + next.key + ": " + next.value);
+        }
+        
         return null;
     }
 

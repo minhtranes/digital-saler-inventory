@@ -14,6 +14,9 @@ package vn.degitalsaler.inventory.infrastructure.repository.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,7 +32,13 @@ public class ProductRepositoryImpl implements ProductRepository{
     @Override
     public JsonNode saveProduct(JsonNode product) {
         
-        this.streamBridge.send("product-storage-out", product);
+        Message<JsonNode> message = MessageBuilder.withPayload(product)
+                .setHeader(KafkaHeaders.MESSAGE_KEY, 12345L)
+                .build();
+        
+        this.streamBridge.send("product-storage-out", message);
+        
+        return null;
     }
 
 }
