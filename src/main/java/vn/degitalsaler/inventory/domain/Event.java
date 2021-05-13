@@ -12,15 +12,33 @@
  */
 package vn.degitalsaler.inventory.domain;
 
-public abstract class Event<T> {
-    
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.JsonNode;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "clazz")
+@JsonSubTypes({ @JsonSubTypes.Type(value = ProductCreatedEvent.class, name = "ProductCreatedEvent"),
+    @JsonSubTypes.Type(value = ProductUpdatedEvent.class, name = "ProductUpdatedEvent") })
+public abstract class Event<T extends Serializable>{
+
     T eventId;
-    
+
     long createdTime;
 
-    public Event(T eventId) {
+    Class<?> clazz;
+    
+    public Event() {
+        super();
+    }
+
+    public Event(T eventId, Class<?> clazz) {
         super();
         this.eventId = eventId;
+        this.clazz = clazz;
     }
 
     public T getEventId() {
@@ -30,5 +48,7 @@ public abstract class Event<T> {
     public long getCreatedTime() {
         return this.createdTime;
     }
-    
+
+    public abstract JsonNode getPayload();
+
 }

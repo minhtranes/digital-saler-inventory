@@ -14,6 +14,14 @@ package vn.degitalsaler.inventory.infrastructure.properties;
 
 public class JsonProductProperties {
     
-    
+    private String idPath;
+
+    public String getIdPath() {
+        return idPath;
+    }
+
+    public void setIdPath(String idPath) {
+        this.idPath = idPath;
+    }
     
 }

@@ -12,18 +12,22 @@
  */
 package vn.degitalsaler.inventory.domain;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ProductUpdatedEvent extends Event<Long>{
 
-    private List<JsonNode> payload;
+    private JsonNode payload;
     
-    public ProductUpdatedEvent(Long eventId, List<JsonNode> updatedValue) {
-        super(eventId);
+    public ProductUpdatedEvent(Long eventId, JsonNode payload, Class<?> clazz) {
+        super(eventId, clazz);
         this.createdTime = System.currentTimeMillis();
-        this.payload = updatedValue;
+        this.payload = payload;
+    }
+    
+    public ProductUpdatedEvent(Long eventId, JsonNode payload, Long createdTime, Class<?> clazz) {
+        super(eventId, clazz);
+        this.createdTime = createdTime;
+        this.payload = payload;
     }
   
     /**
@@ -31,7 +35,7 @@ public class ProductUpdatedEvent extends Event<Long>{
      *
      * @return the payload
      */
-    public List<JsonNode> getPayload() {
+    public JsonNode getPayload() {
         return this.payload;
     }
 }

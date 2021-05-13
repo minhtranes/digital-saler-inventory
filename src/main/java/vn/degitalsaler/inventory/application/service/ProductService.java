@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public interface ProductService {
 
-    JsonNode addProduct(JsonNode product);
+    void addProduct(JsonNode product);
     
     JsonNode updateProduct(JsonNode product);
     

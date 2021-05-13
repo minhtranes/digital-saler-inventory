@@ -60,6 +60,16 @@ public class InventoryController {
 //            
 //        }
     }
+    
+    @PostMapping("update/inventory")
+    public ResponseEntity<Object> update(@RequestBody final Object product) {
+        final ObjectNode productAsJson = this.mapper.convertValue(product, ObjectNode.class);
+        
+        this.productService.addProduct(productAsJson);
+
+        return ResponseEntity.ok("200");
+
+    }
 
     @GetMapping("/inventory")
     public ResponseEntity<Object> listAll() {
@@ -74,7 +84,7 @@ public class InventoryController {
     @GetMapping("/inventorys")
     public ResponseEntity<Object> listById(@RequestParam("id") Long id) {
         ReadOnlyKeyValueStore<Long, Object> keyValueStore = this.interactiveQueryService
-            .getQueryableStore("CountsKeyValueStore",
+            .getQueryableStore("key-store-value",
                 QueryableStoreTypes.keyValueStore());
         
         System.out.println("count for hello:" + keyValueStore.get(id));

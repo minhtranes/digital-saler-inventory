@@ -14,10 +14,11 @@ package vn.degitalsaler.inventory.infrastructure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import vn.degitalsaler.inventory.infrastructure.properties.JsonProductProperties;
 
-@ConfigurationProperties
+@Configuration
 public class JsonConfiguration {
 
     @Bean("jsonProductProperties")

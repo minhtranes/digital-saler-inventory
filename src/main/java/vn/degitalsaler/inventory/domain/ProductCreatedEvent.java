@@ -12,23 +12,30 @@
  */
 package vn.degitalsaler.inventory.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ProductCreatedEvent extends Event<Long> {
 
+    @JsonProperty
     private JsonNode payload;
     
-    public ProductCreatedEvent(Long eventId, JsonNode payload) {
-        super(eventId);
+    public ProductCreatedEvent(Long eventId, JsonNode payload, Class<?> clazz) {
+        super(eventId, clazz);
         this.payload = payload;
         this.createdTime = System.currentTimeMillis();
     }
 
-    public JsonNode getPayload() {
-        return this.payload;
+    public ProductCreatedEvent() {
+        super();
     }
 
-    public void setPayload(JsonNode product) {
-        this.payload = product;
+    /**
+     * Gets the payload. The root payload
+     *
+     * @return the payload
+     */
+    public JsonNode getPayload() {
+        return this.payload;
     }
 }
