@@ -96,6 +96,8 @@ public class ProductServiceImpl implements ProductService {
                 new TypeReference<HashMap<String, Object>>() {
                 });
 
+            //FIXME: add a validation for null pointer cases
+            
             final MapDifference<String, Object> difference = Maps.difference(leftMap, rightMap);
             final Map<String, ValueDifference<Object>> changedValue = difference.entriesDiffering();
 
