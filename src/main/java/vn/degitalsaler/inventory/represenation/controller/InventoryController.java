@@ -12,15 +12,9 @@
  */
 package vn.degitalsaler.inventory.represenation.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.state.KeyValueIterator;
-import org.apache.kafka.streams.state.QueryableStoreTypes;
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQueryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,9 +40,6 @@ public class InventoryController {
     @Autowired
     private ObjectMapper mapper;
     
-    @Autowired
-    private InteractiveQueryService interactiveQueryService;
-    
     @PutMapping("/inventory")
     public ResponseEntity<Object> add(@RequestBody final Object product) {
         final ObjectNode productAsJson = this.mapper.convertValue(product, ObjectNode.class);
@@ -58,7 +49,7 @@ public class InventoryController {
         return new ResponseEntity<>(productAsJson, HttpStatus.OK);
     }
     
-    @PostMapping("inventory")
+    @PostMapping("/inventory")
     public ResponseEntity<Object> update(@RequestBody final Object product) {
         final ObjectNode productAsJson = this.mapper.convertValue(product, ObjectNode.class);
         
@@ -70,17 +61,8 @@ public class InventoryController {
     @GetMapping("/inventory")
     public ResponseEntity<Object> listAll() {
         
-        final List<JsonNode> jsonNodes = new ArrayList<>();
-        
-        final ReadOnlyKeyValueStore<Long, JsonNode> keyValueStore = this.interactiveQueryService
-                .getQueryableStore("key-store-value",
-                    QueryableStoreTypes.keyValueStore());
-        
-        final KeyValueIterator<Long, JsonNode> range = keyValueStore.all();
-        while (range.hasNext()) {
-            KeyValue<Long, JsonNode> next = range.next();
-            jsonNodes.add(next.value);
-        }
+        final List<JsonNode> jsonNodes = this.productService.findAll();
+
         return new ResponseEntity<>(jsonNodes, HttpStatus.OK);
     }
 
@@ -90,12 +72,9 @@ public class InventoryController {
     }
 
     @GetMapping("/inventory/{id}")
-    public ResponseEntity<Object> listById(@PathVariable(value = "id", required = false) final Long id) {
-        ReadOnlyKeyValueStore<Long, JsonNode> keyValueStore = this.interactiveQueryService
-            .getQueryableStore("key-store-value",
-                QueryableStoreTypes.keyValueStore());
-        
-        JsonNode jsonNode = keyValueStore.get(id);
+    public ResponseEntity<Object> listById(@PathVariable(value = "id", required = true) final Long id) {
+
+        final JsonNode jsonNode = this.productService.findProductById(id);
 
         return new ResponseEntity<>(jsonNode, HttpStatus.OK);
     }

@@ -12,12 +12,17 @@
  */
 package vn.degitalsaler.inventory.application.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.kafka.streams.KeyValue;
+import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQueryService;
 import org.springframework.stereotype.Service;
@@ -38,6 +43,10 @@ import vn.degitalsaler.inventory.infrastructure.repository.ProductEventRepositor
 
 @Service("productService")
 public class ProductServiceImpl implements ProductService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
+
+    private static final String PRODUCT_STORAGE = "key-store-value";
 
     @Autowired
     private ProductEventRepository productEventRepository;
@@ -62,32 +71,51 @@ public class ProductServiceImpl implements ProductService {
             final ProductCreatedEvent createdEvent = new ProductCreatedEvent(id, product, ProductCreatedEvent.class);
             this.productEventRepository.saveProductEvent(createdEvent);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error while adding a new product. Detail: ", e);
         }
     }
 
     @Override
     public List<JsonNode> findAll() {
-        return null;
+        final List<JsonNode> jsonNodes = new ArrayList<>();
+        try {
+            final ReadOnlyKeyValueStore<Long, JsonNode> keyValueStore = this.interactiveQueryService.getQueryableStore(
+                PRODUCT_STORAGE, QueryableStoreTypes.keyValueStore());
+
+            final KeyValueIterator<Long, JsonNode> range = keyValueStore.all();
+            while (range.hasNext()) {
+                KeyValue<Long, JsonNode> next = range.next();
+                jsonNodes.add(next.value);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error while finding all products. Detail: ", e);
+        }
+        return jsonNodes;
     }
 
     @Override
     public JsonNode findProductById(final Long id) {
-        return null;
+        try {
+            final ReadOnlyKeyValueStore<Long, JsonNode> keyValueStore = this.interactiveQueryService.getQueryableStore(
+                PRODUCT_STORAGE, QueryableStoreTypes.keyValueStore());
+
+            return keyValueStore.get(id);
+        } catch (Exception e) {
+            LOGGER.error("Error while finding a product by id [{}]. Detail: ", id, e);
+            return null;
+        }
     }
 
     @Override
     public JsonNode updateProduct(final JsonNode product) {
+        final Map<String, Object> productAsMap = mapper.convertValue(product, new TypeReference<Map<String, Object>>() {
+        });
+        final Long id = JsonPath.parse(productAsMap).read(this.jsonProductProperties.getIdPath(), Long.class);
         try {
-            final Map<String, Object> productAsMap = mapper.convertValue(product,
-                new TypeReference<Map<String, Object>>() {
-                });
-            final Long id = JsonPath.parse(productAsMap).read(this.jsonProductProperties.getIdPath(), Long.class);
-
             final ReadOnlyKeyValueStore<Long, JsonNode> keyValueStore = this.interactiveQueryService.getQueryableStore(
-                "key-store-value", QueryableStoreTypes.keyValueStore());
+                PRODUCT_STORAGE, QueryableStoreTypes.keyValueStore());
 
-            JsonNode oldProduct = keyValueStore.get(id);
+            final JsonNode oldProduct = keyValueStore.get(id);
 
             final Map<String, Object> leftMap = mapper.convertValue(oldProduct,
                 new TypeReference<HashMap<String, Object>>() {
@@ -97,11 +125,11 @@ public class ProductServiceImpl implements ProductService {
                 });
 
             //FIXME: add a validation for null pointer cases
-            
+
             final MapDifference<String, Object> difference = Maps.difference(leftMap, rightMap);
             final Map<String, ValueDifference<Object>> changedValue = difference.entriesDiffering();
 
-            if (changedValue.isEmpty()) {
+            if (!changedValue.isEmpty()) {
                 final long createdTime = System.currentTimeMillis();
 
                 changedValue.forEach((key, value) -> {
@@ -115,12 +143,14 @@ public class ProductServiceImpl implements ProductService {
 
                     this.productEventRepository.saveProductEvent(event);
                 });
+                return product;
             } else {
                 // TODO: handling exception
+                return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error while updating a product by id [{}]. Detail: ", id, e);
+            return product;
         }
-        return null;
     }
 }

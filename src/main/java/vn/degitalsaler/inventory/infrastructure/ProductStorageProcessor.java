@@ -22,7 +22,6 @@ import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Named;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonSerde;
@@ -38,9 +37,13 @@ import vn.degitalsaler.inventory.domain.Event;
 @Configuration
 public class ProductStorageProcessor {
 
-    @Autowired
     private ObjectMapper mapper;
     
+    public ProductStorageProcessor(ObjectMapper mapper) {
+        super();
+        this.mapper = mapper;
+    }
+
     @Bean
     public Consumer<KStream<Long, Event<Long>>> productEventProcessor() {
 
@@ -55,8 +58,10 @@ public class ProductStorageProcessor {
                     });
                 final String changedKey = newValueAsMap.entrySet().stream().collect(Collectors.toList()).get(0).getKey();
 
-                final DocumentContext documentContext = JsonPath.parse(oldValueAsMap).set(changedKey, newValue);
-            
+                final Object changedValue = JsonPath.parse(newValueAsMap).read(String.format("$.%s", changedKey), JsonNode.class);
+                
+                final DocumentContext documentContext = JsonPath.parse(oldValueAsMap).set(changedKey, changedValue);
+                
                 return mapper.convertValue(documentContext.json(), JsonNode.class);
 
             }, Named.as("product-storage"), Materialized.as("key-store-value"));

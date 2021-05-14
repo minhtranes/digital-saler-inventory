@@ -30,6 +30,10 @@ public class ProductUpdatedEvent extends Event<Long>{
         this.payload = payload;
     }
   
+    public ProductUpdatedEvent() {
+        super();
+    }
+
     /**
      * Gets the payload. Include the updated key and value
      *
