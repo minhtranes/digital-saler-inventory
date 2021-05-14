@@ -63,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void addProduct(final JsonNode product) {
         try {
+            //FIXME: check id exists before adding product
             final Map<String, Object> productAsMap = mapper.convertValue(product,
                 new TypeReference<Map<String, Object>>() {
                 });
