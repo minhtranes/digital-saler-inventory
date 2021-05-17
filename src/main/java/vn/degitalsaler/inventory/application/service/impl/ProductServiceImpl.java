@@ -35,7 +35,10 @@ import com.google.common.collect.MapDifference.ValueDifference;
 import com.google.common.collect.Maps;
 import com.jayway.jsonpath.JsonPath;
 
+import vn.degitalsaler.inventory.application.exception.InventoryException;
 import vn.degitalsaler.inventory.application.service.ProductService;
+import vn.degitalsaler.inventory.domain.ProductRequest;
+import vn.degitalsaler.inventory.domain.ProductResponse;
 import vn.degitalsaler.inventory.domain.event.ProductCreatedEvent;
 import vn.degitalsaler.inventory.domain.event.ProductUpdatedEvent;
 import vn.degitalsaler.inventory.infrastructure.properties.JsonProductProperties;
@@ -61,62 +64,84 @@ public class ProductServiceImpl implements ProductService {
     private InteractiveQueryService interactiveQueryService;
 
     @Override
-    public void addProduct(final JsonNode product) {
+    public ProductResponse addProduct(final ProductRequest product) {
+        final JsonNode productAsJson = product.getProduct();
+        final ProductResponse response = new ProductResponse(productAsJson);
         try {
-            //FIXME: check id exists before adding product
-            final Map<String, Object> productAsMap = mapper.convertValue(product,
+            final Map<String, Object> productAsMap = mapper.convertValue(productAsJson,
                 new TypeReference<Map<String, Object>>() {
                 });
             final Long id = JsonPath.parse(productAsMap).read(this.jsonProductProperties.getIdPath(), Long.class);
+            //FIXME: check id exists before adding product
+            this.validateExistingId(id);
 
-            final ProductCreatedEvent createdEvent = new ProductCreatedEvent(id, product, ProductCreatedEvent.class);
+            final ProductCreatedEvent createdEvent = new ProductCreatedEvent(id, productAsJson,
+                ProductCreatedEvent.class);
             this.productEventRepository.saveProductEvent(createdEvent);
+            return response;
         } catch (Exception e) {
             LOGGER.error("Error while adding a new product. Detail: ", e);
+            response.setException(e);
+            return response;
         }
     }
 
     @Override
-    public List<JsonNode> findAll() {
-        final List<JsonNode> jsonNodes = new ArrayList<>();
+    public List<ProductResponse> findAll() {
+        final List<ProductResponse> jsonNodes = new ArrayList<>();
         try {
             final ReadOnlyKeyValueStore<Long, JsonNode> keyValueStore = this.interactiveQueryService.getQueryableStore(
                 PRODUCT_STORAGE, QueryableStoreTypes.keyValueStore());
 
             final KeyValueIterator<Long, JsonNode> range = keyValueStore.all();
             while (range.hasNext()) {
-                KeyValue<Long, JsonNode> next = range.next();
-                jsonNodes.add(next.value);
+                final KeyValue<Long, JsonNode> next = range.next();
+                final ProductResponse response = new ProductResponse(next.value);
+                jsonNodes.add(response);
             }
         } catch (Exception e) {
             LOGGER.error("Error while finding all products. Detail: ", e);
+            final ProductResponse response = new ProductResponse(null);
+            response.setException(e);
+            jsonNodes.clear();
+            jsonNodes.add(response);
         }
         return jsonNodes;
     }
 
     @Override
-    public JsonNode findProductById(final Long id) {
+    public ProductResponse findProductById(final Long id) {
         try {
             final ReadOnlyKeyValueStore<Long, JsonNode> keyValueStore = this.interactiveQueryService.getQueryableStore(
                 PRODUCT_STORAGE, QueryableStoreTypes.keyValueStore());
 
-            return keyValueStore.get(id);
+            final JsonNode productAsJson = keyValueStore.get(id);
+            return new ProductResponse(productAsJson);
         } catch (Exception e) {
             LOGGER.error("Error while finding a product by id [{}]. Detail: ", id, e);
-            return null;
+            final ProductResponse response = new ProductResponse(null);
+            response.setException(e);
+            return response;
         }
     }
 
     @Override
-    public JsonNode updateProduct(final JsonNode product) {
+    public ProductResponse updateProduct(final ProductRequest product) {
+        final JsonNode productAsJson = product.getProduct();
+
         final Map<String, Object> productAsMap = mapper.convertValue(product, new TypeReference<Map<String, Object>>() {
         });
         final Long id = JsonPath.parse(productAsMap).read(this.jsonProductProperties.getIdPath(), Long.class);
+
+        final ProductResponse response = new ProductResponse(productAsJson);
         try {
             final ReadOnlyKeyValueStore<Long, JsonNode> keyValueStore = this.interactiveQueryService.getQueryableStore(
                 PRODUCT_STORAGE, QueryableStoreTypes.keyValueStore());
 
             final JsonNode oldProduct = keyValueStore.get(id);
+
+            //FIXME: add a validation for null pointer cases
+            this.validateExistingProduct(oldProduct, id);
 
             final Map<String, Object> leftMap = mapper.convertValue(oldProduct,
                 new TypeReference<HashMap<String, Object>>() {
@@ -124,9 +149,7 @@ public class ProductServiceImpl implements ProductService {
             final Map<String, Object> rightMap = mapper.convertValue(product,
                 new TypeReference<HashMap<String, Object>>() {
                 });
-
-            //FIXME: add a validation for null pointer cases
-
+            
             final MapDifference<String, Object> difference = Maps.difference(leftMap, rightMap);
             final Map<String, ValueDifference<Object>> changedValue = difference.entriesDiffering();
 
@@ -144,14 +167,27 @@ public class ProductServiceImpl implements ProductService {
 
                     this.productEventRepository.saveProductEvent(event);
                 });
-                return product;
+                return response;
             } else {
                 // TODO: handling business exception
-                return null;
+                throw new InventoryException(String.format("the product id [%d] doesn't change anything", id));
             }
         } catch (Exception e) {
             LOGGER.error("Error while updating a product by id [{}]. Detail: ", id, e);
-            return product;
+            response.setException(e);
+            return response;
+        }
+    }
+
+    private void validateExistingProduct(final JsonNode oldProduct,final Long id) throws InventoryException {
+        if(oldProduct == null) {
+            throw new InventoryException(String.format("The product id is [%d] not exist", id));
+        }
+    }
+    
+    private void validateExistingId(Long id) throws InventoryException {
+        if(id == null) {
+            throw new InventoryException(String.format("The product id is [%d] null", id));
         }
     }
 }

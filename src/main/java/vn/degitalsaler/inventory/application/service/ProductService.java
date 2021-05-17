@@ -14,16 +14,17 @@ package vn.degitalsaler.inventory.application.service;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import vn.degitalsaler.inventory.domain.ProductRequest;
+import vn.degitalsaler.inventory.domain.ProductResponse;
 
 public interface ProductService {
 
-    void addProduct(JsonNode product);
+    ProductResponse addProduct(ProductRequest product);
     
-    JsonNode updateProduct(JsonNode product);
+    ProductResponse updateProduct(ProductRequest product);
     
-    List<JsonNode> findAll();
+    List<ProductResponse> findAll();
     
-    JsonNode findProductById(Long id);
+    ProductResponse findProductById(Long id);
     
 }

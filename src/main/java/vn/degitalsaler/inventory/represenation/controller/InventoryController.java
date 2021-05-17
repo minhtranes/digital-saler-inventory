@@ -25,11 +25,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import vn.degitalsaler.inventory.application.service.ProductService;
+import vn.degitalsaler.inventory.domain.ProductRequest;
+import vn.degitalsaler.inventory.domain.ProductResponse;
 
 @RestController
 public class InventoryController {
@@ -44,24 +45,26 @@ public class InventoryController {
     public ResponseEntity<Object> add(@RequestBody final Object product) {
         final ObjectNode productAsJson = this.mapper.convertValue(product, ObjectNode.class);
         
-        this.productService.addProduct(productAsJson);
+        final ProductRequest productRequest = new ProductRequest(productAsJson);
+        final ProductResponse response = this.productService.addProduct(productRequest);
 
-        return new ResponseEntity<>(productAsJson, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
     @PostMapping("/inventory")
     public ResponseEntity<Object> update(@RequestBody final Object product) {
         final ObjectNode productAsJson = this.mapper.convertValue(product, ObjectNode.class);
         
-        this.productService.updateProduct(productAsJson);
+        final ProductRequest productRequest = new ProductRequest(productAsJson);
+        final ProductResponse response = this.productService.updateProduct(productRequest);
 
-        return new ResponseEntity<>(productAsJson, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/inventory")
     public ResponseEntity<Object> listAll() {
         
-        final List<JsonNode> jsonNodes = this.productService.findAll();
+        final List<ProductResponse> jsonNodes = this.productService.findAll();
 
         return new ResponseEntity<>(jsonNodes, HttpStatus.OK);
     }
@@ -74,9 +77,9 @@ public class InventoryController {
     @GetMapping("/inventory/{id}")
     public ResponseEntity<Object> listById(@PathVariable(value = "id", required = true) final Long id) {
 
-        final JsonNode jsonNode = this.productService.findProductById(id);
+        final ProductResponse response = this.productService.findProductById(id);
 
-        return new ResponseEntity<>(jsonNode, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
