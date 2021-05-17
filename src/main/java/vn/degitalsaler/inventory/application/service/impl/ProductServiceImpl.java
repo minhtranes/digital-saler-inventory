@@ -146,7 +146,7 @@ public class ProductServiceImpl implements ProductService {
                 });
                 return product;
             } else {
-                // TODO: handling exception
+                // TODO: handling business exception
                 return null;
             }
         } catch (Exception e) {
