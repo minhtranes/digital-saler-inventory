@@ -1,5 +1,5 @@
 /*
- * Class: ProductUpdateEvent
+ * Class: ProductCreatedEvent
  *
  * Created on May 4, 2021
  *
@@ -10,32 +10,28 @@
  * Swiss Post Solution.
  * Floor 4-5-8, ICT Tower, Quang Trung Software City
  */
-package vn.degitalsaler.inventory.domain;
+package vn.degitalsaler.inventory.domain.event;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class ProductUpdatedEvent extends Event<Long>{
+public class ProductCreatedEvent extends Event<Long> {
 
+    @JsonProperty
     private JsonNode payload;
     
-    public ProductUpdatedEvent(Long eventId, JsonNode payload, Class<?> clazz) {
+    public ProductCreatedEvent(Long eventId, JsonNode payload, Class<?> clazz) {
         super(eventId, clazz);
+        this.payload = payload;
         this.createdTime = System.currentTimeMillis();
-        this.payload = payload;
     }
-    
-    public ProductUpdatedEvent(Long eventId, JsonNode payload, Long createdTime, Class<?> clazz) {
-        super(eventId, clazz);
-        this.createdTime = createdTime;
-        this.payload = payload;
-    }
-  
-    public ProductUpdatedEvent() {
+
+    public ProductCreatedEvent() {
         super();
     }
 
     /**
-     * Gets the payload. Include the updated key and value
+     * Gets the payload. The root payload
      *
      * @return the payload
      */

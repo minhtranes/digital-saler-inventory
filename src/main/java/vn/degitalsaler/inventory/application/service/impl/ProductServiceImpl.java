@@ -36,8 +36,8 @@ import com.google.common.collect.Maps;
 import com.jayway.jsonpath.JsonPath;
 
 import vn.degitalsaler.inventory.application.service.ProductService;
-import vn.degitalsaler.inventory.domain.ProductCreatedEvent;
-import vn.degitalsaler.inventory.domain.ProductUpdatedEvent;
+import vn.degitalsaler.inventory.domain.event.ProductCreatedEvent;
+import vn.degitalsaler.inventory.domain.event.ProductUpdatedEvent;
 import vn.degitalsaler.inventory.infrastructure.properties.JsonProductProperties;
 import vn.degitalsaler.inventory.infrastructure.repository.ProductEventRepository;
 

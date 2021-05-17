@@ -12,7 +12,7 @@
  */
 package vn.degitalsaler.inventory.infrastructure.repository;
 
-import vn.degitalsaler.inventory.domain.Event;
+import vn.degitalsaler.inventory.domain.event.Event;
 
 public interface ProductEventRepository {
     

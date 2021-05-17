@@ -19,7 +19,7 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Repository;
 
-import vn.degitalsaler.inventory.domain.Event;
+import vn.degitalsaler.inventory.domain.event.Event;
 import vn.degitalsaler.inventory.infrastructure.repository.ProductEventRepository;
 
 @Repository("productEventRepository")

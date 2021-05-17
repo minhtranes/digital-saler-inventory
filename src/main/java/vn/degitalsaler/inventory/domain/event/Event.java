@@ -10,7 +10,7 @@
  * Swiss Post Solution.
  * Floor 4-5-8, ICT Tower, Quang Trung Software City
  */
-package vn.degitalsaler.inventory.domain;
+package vn.degitalsaler.inventory.domain.event;
 
 import java.io.Serializable;
 

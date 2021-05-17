@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-import vn.degitalsaler.inventory.domain.Event;
+import vn.degitalsaler.inventory.domain.event.Event;
 
 @Configuration
 public class ProductStorageProcessor {
